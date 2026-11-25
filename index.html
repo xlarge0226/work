@@ -173,8 +173,18 @@
     <button id="t-chk" onclick="setTab('chk')">✅ 檢核</button>
     <button id="t-qa" onclick="setTab('qa')">🎙️ 筆錄問句</button>
   </div>
-  <script src="data.js"></script>
   <script>
+    window.__dataFileMissing = false;
+    window.__dataSyntaxErr = "";
+    window.addEventListener("error", function(e) {
+      if (e.filename && e.filename.includes("data.js")) {
+        window.__dataSyntaxErr = e.message + " (第 " + e.lineno + " 行)";
+      }
+    });
+  </script>
+  <script src="./data.js" onerror="window.__dataFileMissing = true;"></script>
+  <script>
+    const DB = (typeof DATA !== "undefined") ? DATA : (window.DATA || null);
     let curKey = localStorage.getItem("sel_case") || "";
     let curTab = "all";
     let kw = "";
@@ -231,7 +241,7 @@
     }
 
     function rstChk(k) {
-      if (confirm("清除【" + DATA[k].name + "】勾選紀錄？")) {
+      if (confirm("清除【" + DB[k].name + "】勾選紀錄？")) {
         localStorage.removeItem("c_" + k);
         render();
         toast("已重置勾選");
@@ -239,13 +249,13 @@
     }
 
     function copyChk(k) {
-      const d = DATA[k], s = getChk(k);
+      const d = DB[k], s = getChk(k);
       const text = `【${d.name}檢核】\n` + d.chk.map((v, i) => `${s[i] ? "☑" : "☐"} ${v}`).join("\n");
       navigator.clipboard.writeText(text).then(() => toast("✅ 已複製檢核摘要"));
     }
 
     function copyQA(k) {
-      const d = DATA[k];
+      const d = DB[k];
       const text = `【${d.name}筆錄問句清單】\n` + (d.qa || []).map((x, i) => `${i + 1}. [${x.tag}] 問：${x.q}\n答：\n`).join("\n");
       navigator.clipboard.writeText(text).then(() => toast("🎙️ 已複製整份筆錄問句"));
     }
@@ -255,7 +265,7 @@
     }
 
     function renderCard(k, isSearch = false) {
-      const d = DATA[k];
+      const d = DB[k];
       const s = getChk(k);
       const done = d.chk.filter((_, i) => s[i]).length;
       const pct = d.chk.length ? Math.round((done / d.chk.length) * 100) : 0;
@@ -266,7 +276,6 @@
         h += `<div style="margin: 18px 0 8px; font-weight: 800; color: #38bdf8; font-size: .95rem;">${d.icon} ${d.name}</div>`;
       }
 
-      // 1. SOP 區塊
       if (curTab === "all" || curTab === "sop") {
         const steps = isSearch ? d.sop.filter(x => x.toLowerCase().includes(kw.toLowerCase())) : d.sop;
         if (steps.length) {
@@ -277,7 +286,6 @@
         }
       }
 
-      // 2. 應備表單檢核區塊
       if (curTab === "all" || curTab === "chk") {
         const chks = d.chk.map((txt, idx) => ({ txt, idx })).filter(o => !isSearch || o.txt.toLowerCase().includes(kw.toLowerCase()));
         if (chks.length) {
@@ -296,7 +304,6 @@
         }
       }
 
-      // 3. 筆錄問句區塊（無筆錄案件自動隱藏；單獨切換至筆錄分頁時顯示提示）
       if (curTab === "all" || curTab === "qa") {
         if (hasQA) {
           const qas = isSearch ? d.qa.filter(x => (x.tag + x.q).toLowerCase().includes(kw.toLowerCase())) : d.qa;
@@ -322,25 +329,35 @@
     }
 
     function render() {
-      if (typeof DATA === "undefined") {
-        document.getElementById("mainBox").innerHTML = `<div class="card" style="text-align:center; color:#f43f5e;">⚠️ 尚未載入 data.js 資料檔</div>`;
+      const main = document.getElementById("mainBox");
+      if (!DB) {
+        let reason = "請確認 data.js 與 index.html 位於同一層目錄，且檔名為全小寫 data.js。";
+        if (window.__dataFileMissing) {
+          reason = "❌ 找不到 ./data.js 檔案（HTTP 404），請檢查 GitHub 儲存庫根目錄是否有上傳小寫 data.js。";
+        } else if (window.__dataSyntaxErr) {
+          reason = "❌ data.js 檔案有找到，但內部有語法錯誤：" + window.__dataSyntaxErr;
+        }
+        main.innerHTML = `<div class="card" style="text-align:center; color:#f43f5e; padding:24px 16px;">
+          <div style="font-weight:800; margin-bottom:8px;">⚠️ 尚未載入 data.js 資料檔</div>
+          <div style="font-size:.85rem; color:#cbd5e1;">${reason}</div>
+        </div>`;
         return;
       }
 
-      const keys = Object.keys(DATA);
-      if (!curKey || !DATA[curKey]) curKey = keys[0];
+      const keys = Object.keys(DB);
+      if (!keys.length) return;
+      if (!curKey || !DB[curKey]) curKey = keys.at(0);
 
       document.getElementById("caseNav").innerHTML = keys.map(k => {
-        const d = DATA[k];
+        const d = DB[k];
         const act = (!kw && k === curKey) ? "active" : "";
         return `<button class="nav-btn ${act}" onclick="setCase('${k}')">${d.icon} ${d.name}</button>`;
       }).join("");
 
-      const main = document.getElementById("mainBox");
       if (kw) {
         const q = kw.toLowerCase();
         const matched = keys.filter(k => {
-          const d = DATA[k];
+          const d = DB[k];
           const pool = [d.name, ...d.sop, ...d.chk, ...(d.qa || []).map(x => x.tag + x.q)].join(" ").toLowerCase();
           return pool.includes(q);
         });
