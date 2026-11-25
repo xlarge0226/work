@@ -135,7 +135,7 @@
           { tag: "嫌疑人-權利", q: "【刑訴第95條三項權利告知】你因涉嫌「竊盜罪」接受詢問，依法告知：一、得保持緘默，無須違背自己之意思而為陳述；二、得選任辯護人（如為低收入戶、中低收入戶、原住民或其他依法令得請求法律扶助者，得請求之）；三、得請求調查有利之證據。以上權利是否明瞭？是否需選任辯護人？（夜間詢問加問：現在為夜間○時○分，依刑訴第100條之3規定，你是否明示同意於夜間接受詢問？）" },
           { tag: "嫌疑人-提審", q: "【提審法告知（逮捕拘禁時）】你於○年○月○日○時○分在○○處因現行犯（或拘提）遭警方逮捕，依提審法第1條及第2條規定，你本人或他人得向逮捕地之地方法院聲請提審，並已以書面告知你及你指定之親友（或你不需通知親友），以上規定你是否明瞭？" },
           { tag: "嫌疑人-經過", q: "你於何年、月、日、時許，自何處出發、搭乘何種交通工具（車號為何）前往案發地點？有無共犯接應或分工？" },
-          { tag: "嫌疑人-手法", q: "你當時如何進入現場及以何種方式（徒手或持何種工具）竊取被害人財物？共計竊得哪些物品？" },
+          { tag: "嫌疑人-手法", q: "你當時如何進入現場及以何種方式（徒手或持何工具）竊取被害人財物？共計竊得哪些物品？" },
           { tag: "嫌疑人-贓物", q: "你竊得上述財物後如何處置（變賣管道、銷贓金額、花用情形或目前藏放地點）？犯案工具目前何在？" },
           { tag: "嫌疑人-指認", q: "提示現場監視器畫面（及查扣贓證物照片），畫面中之人（及該物品）是否為你本人及你所竊得之物？對此有何辯解或補充？" }
         ]
@@ -180,18 +180,123 @@
       },
       embezzlement: {
         icon: "💼", name: "侵占案",
-        // ... (侵占案 SOP、檢核與筆錄問句設定)
+        sop: [
+          "確認要件：確認行為人合法持有在先（借用／代管／業務收款）或拾得他人遺失物後變易持有為所有拒不歸還。",
+          "蒐集證據：附卷借據、租賃契約、LINE 催討對話截圖、公司短少帳冊或監視器撿走遺失物畫面。",
+          "通知到案：查明嫌疑人身分後依刑訴第71條之1寄發通知書通知到案製作警詢筆錄。",
+          "函送偵辦：侵占遺失物（刑337）與普通／業務侵占（刑335、336）皆屬非告訴乃論，全卷彙整函送地檢署。"
+        ],
+        chk: [
+          "刑案陳報單／偵查報告",
+          "告訴人（被害人）警詢筆錄",
+          "嫌疑人警詢筆錄及權利告知書",
+          "受（處）理案件證明單",
+          "物權證明／借據租約／LINE催討截圖／公司帳冊",
+          "監視器畫面翻拍照片及光碟（侵占遺失物案必附）"
+        ],
+        qa: [
+          { tag: "被害人-身分", q: "請核對你的國民身分證年籍資料、現住址及聯絡電話是否無誤？你與嫌疑人係何關係？" },
+          { tag: "被害人-交付", q: "你於何年、月、日、時許，在何地點、基於何種原因（借用、代管、業務經手或遺失）使嫌疑人取得該財物？" },
+          { tag: "被害人-財物", q: "遭侵占之財物品名、數量、廠牌型號、外觀特徵或新臺幣金額為何？" },
+          { tag: "被害人-催討", q: "雙方約定歸還期限為何？期滿後你曾於何時、以何種方式向對方催討？對方如何回應？" },
+          { tag: "被害人-證據", q: "你今日提供哪些證據資料（契約、LINE對話截圖、匯款紀錄或監視器）？是否對嫌疑人提出侵占罪告訴？" },
+          { tag: "嫌疑人-權利", q: "【刑訴第95條三項權利告知】你因涉嫌「侵占罪」接受詢問，依法告知：一、得保持緘默，無須違背自己之意思而為陳述；二、得選任辯護人（低收入戶、中低收入戶、原住民等得請求法扶）；三、得請求調查有利之證據。以上權利是否明瞭？是否需選任辯護人？（夜間詢問加問是否同意夜間詢問）" },
+          { tag: "嫌疑人-提審", q: "【提審法告知（逮捕拘禁時）】你於○年○月○日○時○分在○○處遭警方逮捕／拘提，依提審法第1條及第2條規定，你本人或他人得向逮捕地之地方法院聲請提審，並已以書面告知你及你指定之親友，是否明瞭？" },
+          { tag: "嫌疑人-取得", q: "你於何年、月、日、時許，在何地點、以何種方式取得或拾得被害人所有之財物？" },
+          { tag: "嫌疑人-犯意", q: "你取得或拾獲該物後，為何未依約歸還被害人或送交警察機關招領？該財物目前藏放或處置於何處？" },
+          { tag: "嫌疑人-提示", q: "提示LINE催討對話紀錄（及監視器翻拍照片），畫面中之帳號及人員是否為你本人？對此有何辯解或補充？" }
+        ]
       },
       intimidation: {
         icon: "⚠️", name: "恐嚇案",
-        // ... (恐嚇案 SOP、檢核與筆錄問句設定)
+        sop: [
+          "篩檢家暴：若雙方為家庭成員或現有／曾有親密關係伴侶，同步執行家暴通報、TIPVDA危險評估並協助聲請保護令。",
+          "還原原話：筆錄一字不漏記載加害生命、身體、自由、名譽、財產言詞及被害人心生畏懼情狀（單純罵三字經屬公然侮辱）。",
+          "保全證據：擷取完整對話截圖（須含對方帳號ID、頭像及時間軸）、通話錄音譯文或現場監視器。",
+          "查緝移送：持凶器當場恐嚇依刑訴第88條現行犯逮捕查扣凶器；非現行犯通知到案後函送地檢署。"
+        ],
+        chk: [
+          "刑案陳報單／偵查報告",
+          "被害人警詢筆錄（一字不漏載明恐嚇原話及畏懼感）",
+          "嫌疑人警詢筆錄及權利告知書",
+          "受（處）理案件證明單",
+          "恐嚇對話截圖（含帳號ID）／錄音譯文及光碟",
+          "家暴通報表、TIPVDA評估表或跟騷書面告誡（符合要件時）"
+        ],
+        qa: [
+          { tag: "被害人-身分", q: "請核對你的國民身分證年籍資料、現住址及聯絡電話是否無誤？你與嫌疑人為何關係（確認是否屬家暴或跟騷範疇）？" },
+          { tag: "被害人-起因", q: "雙方於案發前因何事發生糾紛或嫌隙？現場有無其他證人在場目擊？" },
+          { tag: "被害人-時地方式", q: "嫌疑人於何年、月、日、時許，在何地點或透過何種通訊軟體／電話對你實施恐嚇？" },
+          { tag: "被害人-原話", q: "請一字不漏完整陳述嫌疑人當時對你所說之具體加害生命、身體、自由、名譽或財產之恐嚇言詞及動作？" },
+          { tag: "被害人-畏懼感", q: "你聽聞或看到上述言詞與舉動後，內心感受為何？是否因此心生畏懼、致生危害於安全？" },
+          { tag: "被害人-證據", q: "你今日提供哪些證據資料（對話截圖、錄音檔、監視器或驗傷單）？是否對嫌疑人提出恐嚇危害安全告訴？" },
+          { tag: "嫌疑人-權利", q: "【刑訴第95條三項權利告知】你因涉嫌「恐嚇危害安全罪」接受詢問，依法告知：一、得保持緘默，無須違背自己之意思而為陳述；二、得選任辯護人（低收入戶、中低收入戶、原住民等得請求法扶）；三、得請求調查有利之證據。以上權利是否明瞭？是否需選任辯護人？（夜間詢問加問是否同意夜間詢問）" },
+          { tag: "嫌疑人-提審", q: "【提審法告知（逮捕拘禁時）】你於○年○月○日○時○分在○○處遭警方逮捕／拘提，依提審法第1條及第2條規定，你本人或他人得向逮捕地之地方法院聲請提審，並已以書面告知你及你指定之親友，是否明瞭？" },
+          { tag: "嫌疑人-行為", q: "你於何年、月、日、時許，因何原因與被害人發生爭執？當時是否曾說出上述恐嚇言詞或持用任何器械？" },
+          { tag: "嫌疑人-提示", q: "提示通訊軟體對話截圖（及錄音譯文、監視器畫面），該帳號及人員是否為你本人使用？對此有何辯解或補充？" }
+        ]
       },
       traffic: {
         icon: "🚨", name: "交通事故",
-        // ... (交通事故 SOP、檢核與筆錄問句設定)
+        sop: [
+          "安全警戒：警車停放後方警戒、擺放交通錐與警告牌防二次追撞，有人受傷（A2）優先通報119救護送醫。",
+          "現場測繪：拍攝遠中近景（含號誌標線、車牌、撞擊點、煞車痕及散落物），繪製現場圖後始得移置A1/A2車輛。",
+          "酒毒測試：對雙方駕駛實施酒精濃度測試（全程密錄器錄影），若有未飲酒卻精神恍惚等徵候依毒駕程序篩檢。",
+          "交付聯單：製作談話紀錄表，當場發給「道路交通事故當事人登記聯單」，告知A2過失傷害6個月告訴期間。"
+        ],
+        chk: [
+          "道路交通事故現場圖",
+          "道路交通事故調查報告表（一）、（二）",
+          "現場照片黏貼表（遠景、中景、近景、車損及痕跡）",
+          "當事人酒精測定紀錄表（雙方駕駛均須測試）",
+          "當事人談話紀錄表",
+          "道路交通事故當事人登記聯單（存根聯）",
+          "行車紀錄器記憶卡備份及路口監視器影像光碟"
+        ],
+        qa: [
+          { tag: "身分與資格", q: "請核對你的國民身分證年籍資料與聯絡電話是否無誤？你是否為車號○○○肇事車輛之實際駕駛人？領有何種駕駛執照？" },
+          { tag: "出發與目的", q: "你於何時自何處出發、欲前往何處？車上有無搭載乘客或載運物品？" },
+          { tag: "行向與車道", q: "事故發生前，你駕駛該車沿何道路、往何方向行駛於哪一車道？當時車速約為多少公里？" },
+          { tag: "號誌與路況", q: "行經事故地點時，前方號誌燈號為何？當時天候、光線及路面乾燥／濕滑狀況為何？" },
+          { tag: "發現與反應", q: "你於何時、距離約多少公尺處發現對方車輛（或行人）？發現後採取何種煞車、鳴笛或閃避措施？" },
+          { tag: "撞擊位置", q: "雙方車輛於何處發生碰撞（自身車頭／車側何處撞擊對方何處）？碰撞後最終停放位置有無移動？" },
+          { tag: "傷亡與告訴", q: "本起事故有無造成人員受傷（送往何醫院）或車輛財物受損？是否對對方提出過失傷害告訴（已知悉6個月告訴期間）？" }
+        ]
       }
     };
-    // ... (初始化函式、搜尋與資料渲染邏輯)
+    let curKey = localStorage.getItem("sel_case") || "lost", curTab = "all", kw = "";
+    function toast(m) { const e = document.getElementById("toast"); e.textContent = m; e.classList.add("show"); setTimeout(() => e.classList.remove("show"), 1800); }
+    function setCase(k) { curKey = k; localStorage.setItem("sel_case", k); clearSearch(false); render(); }
+    function setTab(t) { curTab = t; document.querySelectorAll(".bar button").forEach(b => b.classList.remove("active")); document.getElementById("t-" + t).classList.add("active"); render(); }
+    function onSearch() { kw = document.getElementById("kwInput").value.trim(); document.getElementById("kwClear").style.display = kw ? "block" : "none"; render(); }
+    function clearSearch(doRender = true) { kw = ""; document.getElementById("kwInput").value = ""; document.getElementById("kwClear").style.display = "none"; if (doRender) render(); }
+    function hl(txt) { if (!kw) return txt; const re = new RegExp(`(${kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'); return txt.replace(re, '<span class="hl">$1</span>'); }
+    function getChk(k) { return JSON.parse(localStorage.getItem("c_" + k) || "{}"); }
+    function togChk(k, i) { const s = getChk(k); s[i] = !s[i]; localStorage.setItem("c_" + k, JSON.stringify(s)); render(); }
+    function rstChk(k) { if (confirm("清除【" + DATA[k].name + "】勾選？")) { localStorage.removeItem("c_" + k); render(); toast("已重置"); } }
+    function copyChk(k) { const d = DATA[k], s = getChk(k); navigator.clipboard.writeText(`【${d.name}檢核】\n` + d.chk.map((v, i) => `${s[i] ? "☑" : "☐"} ${v}`).join("\n")).then(() => toast("✅ 已複製檢核摘要")); }
+    function copyQA(k) { const d = DATA[k]; navigator.clipboard.writeText(`【${d.name}筆錄問句清單】\n` + (d.qa || []).map((x, i) => `${i + 1}. [${x.tag}] 問：${x.q}\n答：\n`).join("\n")).then(() => toast("🎙️ 已複製純問句清單")); }
+    function renderCard(k, isSearch = false) {
+      const d = DATA[k], s = getChk(k), done = d.chk.filter((_, i) => s[i]).length, pct = Math.round((done / d.chk.length) * 100);
+      let h = "";
+      if (isSearch || curTab === "all" || curTab === "sop") h += `<div class="card"><div class="card-hd"><h2>${d.icon} ${d.name}｜處置 SOP</h2></div>` + d.sop.map((x, i) => `<div class="step"><span class="num">0${i + 1}</span><div>${hl(x)}</div></div>`).join("") + `</div>`;
+      if (!isSearch && (curTab === "all" || curTab === "chk")) h += `<div class="card"><div class="card-hd"><h2>✅ ${d.name}｜卷宗檢核</h2><span style="color:#34d399;font-weight:800">${done}/${d.chk.length} (${pct}%)</span></div><div class="prog-bg"><div class="prog-fill" style="width:${pct}%"></div></div>` + d.chk.map((x, i) => `<label class="chk ${s[i] ? "done" : ""}"><input type="checkbox" ${s[i] ? "checked" : ""} onchange="togChk('${k}',${i})"><span>${i + 1}. ${x}</span></label>`).join("") + `<div class="btns"><button class="btn btn-copy" onclick="copyChk('${k}')">📋 複製檢核</button><button class="btn btn-rst" onclick="rstChk('${k}')">重置</button></div></div>`;
+      if (isSearch || curTab === "all" || curTab === "qa") {
+        const qaList = d.qa || [];
+        if (qaList.length) h += `<div class="card"><div class="card-hd"><h2>🎙️ ${d.name}｜筆錄問句範例（共${qaList.length}題）</h2></div>` + qaList.map((x, i) => `<div class="qa-box"><div class="qa-q"><span class="qa-tag">${x.tag}</span>${i + 1}. 問：${hl(x.q)}</div></div>`).join("") + `<div class="btns"><button class="btn btn-purple" onclick="copyQA('${k}')">📋 複製純問句（含空白答欄）</button></div></div>`;
+      }
+      return h;
+    }
+    function render() {
+      document.getElementById("caseNav").style.display = kw ? "none" : "grid";
+      document.getElementById("caseNav").innerHTML = Object.keys(DATA).map(k => `<button class="nav-btn ${k === curKey ? "active" : ""}" onclick="setCase('${k}')">${DATA[k].icon} ${DATA[k].name}</button>`).join("");
+      if (kw) {
+        const hits = Object.keys(DATA).filter(k => JSON.stringify(DATA[k]).toLowerCase().includes(kw.toLowerCase()));
+        document.getElementById("mainBox").innerHTML = hits.length ? hits.map(k => renderCard(k, true)).join("") : `<div class="card" style="text-align:center;color:#94a3b8">找不到符合「${kw}」的項目</div>`;
+      } else {
+        document.getElementById("mainBox").innerHTML = renderCard(curKey, false);
+      }
+    }
     render();
   </script>
 </body>
