@@ -3,373 +3,173 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>外勤戰術 SOP 與檢核系統</title>
+  <title>筆錄・法條・卷宗檢核</title>
   <style>
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     body {
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
-      background: radial-gradient(circle at top, #0f172a 0%, #050811 65%);
-      color: #f8fafc;
-      padding-bottom: 92px;
-      line-height: 1.55;
-      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", sans-serif;
+      background: #070b14; color: #f8fafc;
+      padding-bottom: 90px; line-height: 1.5;
     }
     header {
-      position: sticky; top: 0; z-index: 99;
-      background: rgba(5, 8, 17, 0.92);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid #1e293b;
-      padding: 12px 16px;
-      display: flex; justify-content: space-between; align-items: center;
+      position: sticky; top: 0; z-index: 50;
+      background: #0b1120; border-bottom: 1px solid #1e293b;
+      padding: 12px 16px; display: flex; justify-content: space-between;
     }
-    .brand {
-      font-size: 1.05rem; font-weight: 800; letter-spacing: .5px;
-      background: linear-gradient(90deg, #ffffff, #38bdf8);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
+    .brand { font-weight: 800; color: #38bdf8; }
     .badge {
-      font-size: .72rem; font-weight: 700; padding: 3px 9px; border-radius: 999px;
-      background: rgba(56, 189, 248, 0.16); color: #38bdf8;
-      border: 1px solid rgba(56, 189, 248, 0.35);
+      font-size: .75rem; padding: 2px 8px; border-radius: 999px;
+      background: rgba(56,189,248,.15); color: #38bdf8;
     }
-    .wrap { max-width: 780px; margin: 12px auto; padding: 0 14px; }
-    .search-box { position: relative; margin-bottom: 12px; }
-    .search-input {
+    .wrap { max-width: 760px; margin: 12px auto; padding: 0 12px; }
+    .in {
       width: 100%; background: #0f172a; border: 1px solid #334155;
-      color: #f8fafc; padding: 11px 38px 11px 14px; border-radius: 12px;
-      font-size: .92rem; outline: none; transition: border-color .2s;
-    }
-    .search-input:focus { border-color: #38bdf8; }
-    .search-clear {
-      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
-      background: none; border: none; color: #94a3b8; font-size: 1rem;
-      cursor: pointer; display: none;
+      color: #fff; padding: 10px 12px; border-radius: 10px; font-size: .9rem;
     }
     .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(105px, 1fr));
-      gap: 8px; margin-bottom: 14px;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 8px; margin: 12px 0;
     }
     .nav-btn {
       background: #0f172a; border: 1px solid #1e293b; color: #94a3b8;
-      padding: 10px 6px; border-radius: 12px; font-size: .85rem; font-weight: 700;
-      cursor: pointer; transition: all .18s; text-align: center;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      padding: 9px 6px; border-radius: 10px; font-weight: 700; cursor: pointer;
     }
-    .nav-btn.active {
-      background: linear-gradient(135deg, #0284c7, #2563eb);
-      color: #fff; border-color: #38bdf8;
-      box-shadow: 0 0 15px rgba(56, 189, 248, 0.35);
-    }
+    .nav-btn.active { background: #0284c7; color: #fff; border-color: #38bdf8; }
     .card {
-      background: linear-gradient(180deg, #131c2e 0%, #0d1320 100%);
-      border: 1px solid #1e293b; border-radius: 16px;
-      padding: 16px; margin-bottom: 16px;
+      background: #111827; border: 1px solid #1e293b;
+      border-radius: 14px; padding: 14px; margin-bottom: 14px;
     }
-    .card-hd {
+    .hd {
       display: flex; justify-content: space-between; align-items: center;
-      border-bottom: 1px solid #1e293b; padding-bottom: 10px; margin-bottom: 12px;
+      border-bottom: 1px solid #1e293b; padding-bottom: 8px; margin-bottom: 10px;
     }
-    .card-hd h2 { margin: 0; font-size: 1rem; color: #38bdf8; }
-    .step {
-      display: flex; gap: 10px; background: rgba(5, 8, 17, 0.65);
-      border: 1px solid #1e293b; border-left: 3px solid #38bdf8;
-      border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; font-size: .92rem;
+    .hd h2 { margin: 0; font-size: .98rem; color: #38bdf8; }
+    .box {
+      background: #090d16; border: 1px solid #1e293b;
+      border-left: 3px solid #a855f7; border-radius: 8px;
+      padding: 10px; margin-bottom: 8px; cursor: pointer;
     }
-    .num {
-      background: rgba(56, 189, 248, 0.2); color: #38bdf8;
-      font-size: .74rem; font-weight: 800; padding: 2px 7px;
-      border-radius: 6px; height: fit-content; flex-shrink: 0;
+    .law { border-left-color: #f59e0b; cursor: default; }
+    .rights {
+      background: rgba(244,63,94,.08); border: 1px solid rgba(244,63,94,.35);
+      border-left: 4px solid #f43f5e; border-radius: 10px;
+      padding: 10px; margin-bottom: 10px;
     }
-    .prog-bg {
-      background: #050811; border: 1px solid #1e293b;
-      border-radius: 999px; height: 8px; overflow: hidden; margin-bottom: 12px;
-    }
-    .prog-fill {
-      height: 100%; background: linear-gradient(90deg, #059669, #34d399);
-      transition: width .25s ease;
-    }
-    .chk {
-      display: flex; align-items: flex-start; gap: 10px; padding: 10px;
-      border-radius: 10px; margin-bottom: 6px;
-      background: rgba(5, 8, 17, 0.5); cursor: pointer; font-size: .92rem;
-    }
-    .chk input {
-      width: 19px; height: 19px; margin-top: 2px;
-      accent-color: #10b981; flex-shrink: 0;
-    }
-    .chk.done { background: rgba(16, 185, 129, 0.1); }
+    .chk { display: flex; gap: 8px; padding: 8px; cursor: pointer; }
     .chk.done span { text-decoration: line-through; color: #64748b; }
-    .qa-box {
-      background: rgba(5, 8, 17, 0.65); border: 1px solid #1e293b;
-      border-left: 3px solid #a855f7; border-radius: 10px;
-      padding: 10px 12px; margin-bottom: 8px; cursor: pointer;
-    }
-    .qa-box:active { background: rgba(168, 85, 247, 0.12); }
-    .qa-q { color: #e9d5ff; font-weight: 600; font-size: .9rem; }
-    .qa-tag {
-      display: inline-block; background: rgba(168, 85, 247, 0.22);
-      color: #d8b4fe; font-size: .74rem; font-weight: 800;
-      padding: 1px 6px; border-radius: 5px; margin-right: 6px;
-    }
-    .btns { display: flex; gap: 10px; margin-top: 14px; }
     .btn {
-      flex: 1; padding: 11px; border-radius: 10px; border: none;
-      font-size: .88rem; font-weight: 700; cursor: pointer;
+      width: 100%; padding: 10px; border: none; border-radius: 10px;
+      font-weight: 700; color: #fff; background: #7e22ce; cursor: pointer; margin-top: 8px;
     }
-    .btn-copy { background: linear-gradient(135deg, #059669, #10b981); color: #fff; }
-    .btn-purple { background: linear-gradient(135deg, #7e22ce, #a855f7); color: #fff; }
-    .btn-rst {
-      background: rgba(244, 63, 94, 0.15); color: #f43f5e;
-      border: 1px solid rgba(244, 63, 94, 0.35); flex: .42;
-    }
+    .btn-g { background: #059669; }
     .bar {
-      position: fixed; bottom: 14px; left: 50%; transform: translateX(-50%);
-      width: calc(100% - 28px); max-width: 480px;
-      background: rgba(15, 23, 42, 0.94); backdrop-filter: blur(14px);
-      border: 1px solid #334155; border-radius: 999px;
-      display: flex; padding: 5px; z-index: 99;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+      position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%);
+      width: calc(100% - 24px); max-width: 480px; background: #0f172a;
+      border: 1px solid #334155; border-radius: 999px; display: flex; padding: 4px;
     }
     .bar button {
       flex: 1; background: none; border: none; color: #94a3b8;
-      font-size: .82rem; font-weight: 700; padding: 9px 4px;
-      border-radius: 999px; cursor: pointer;
+      padding: 8px 4px; border-radius: 999px; font-weight: 700; cursor: pointer;
     }
-    .bar button.active {
-      background: linear-gradient(135deg, #0284c7, #2563eb); color: #fff;
-    }
-    .hl { background: rgba(250, 204, 21, 0.28); color: #fde047; padding: 0 3px; border-radius: 4px; }
+    .bar button.active { background: #0284c7; color: #fff; }
     .toast {
-      position: fixed; top: 64px; left: 50%; transform: translateX(-50%);
-      background: #10b981; color: #042f2e; padding: 8px 18px;
-      border-radius: 999px; font-size: .85rem; font-weight: 800;
-      opacity: 0; pointer-events: none; transition: .25s; z-index: 200;
+      position: fixed; top: 60px; left: 50%; transform: translateX(-50%);
+      background: #10b981; color: #042f2e; padding: 6px 16px;
+      border-radius: 999px; font-weight: 800; display: none; z-index: 99;
     }
-    .toast.show { opacity: 1; }
   </style>
 </head>
 <body>
   <header>
-    <div class="brand">🛡️ 外勤戰術 SOP 與檢核系統</div>
-    <span class="badge">DARK OPS</span>
+    <div class="brand">筆錄・法條・卷宗檢核</div>
+    <span class="badge">OPS</span>
   </header>
-
   <div id="toast" class="toast">已複製</div>
-
   <div class="wrap">
-    <div class="search-box">
-      <input type="text" id="kwInput" class="search-input" placeholder="🔍 跨案件搜尋關鍵字（SOP / 表單 / 筆錄）..." oninput="onSearch()" />
-      <button id="kwClear" class="search-clear" onclick="clearSearch()">✕</button>
-    </div>
-    <nav class="grid" id="caseNav"></nav>
-    <main id="mainBox"></main>
+    <input id="kw" class="in" placeholder="搜尋筆錄 / 法條 / 卷宗..." oninput="render()" />
+    <nav id="nav" class="grid"></nav>
+    <main id="main"></main>
   </div>
-
   <div class="bar">
-    <button id="t-all" class="active" onclick="setTab('all')">⚡ 全部</button>
-    <button id="t-sop" onclick="setTab('sop')">📖 SOP</button>
-    <button id="t-chk" onclick="setTab('chk')">✅ 檢核</button>
-    <button id="t-qa" onclick="setTab('qa')">🎙️ 筆錄問句</button>
+    <button id="b-all" class="active" onclick="setTab('all')">全部</button>
+    <button id="b-qa" onclick="setTab('qa')">筆錄</button>
+    <button id="b-law" onclick="setTab('law')">法條</button>
+    <button id="b-chk" onclick="setTab('chk')">卷宗檢核</button>
   </div>
+  <script src="./data.js"></script>
   <script>
-    window.__dataFileMissing = false;
-    window.__dataSyntaxErr = "";
-    window.addEventListener("error", function(e) {
-      if (e.filename && e.filename.includes("data.js")) {
-        window.__dataSyntaxErr = e.message + " (第 " + e.lineno + " 行)";
-      }
-    });
-  </script>
-  <script src="./data.js" onerror="window.__dataFileMissing = true;"></script>
-  <script>
-    const DB = (typeof DATA !== "undefined") ? DATA : (window.DATA || null);
-    let curKey = localStorage.getItem("sel_case") || "";
+    const RIGHTS = [
+      { t: "三項權利", q: "依刑事訴訟法第95條告知你：（一）得保持緘默，無須違背自己之意思而為陳述；（二）得選任辯護人，如為低收入戶、中低收入戶、原住民或其他依法令得請求法律扶助者，得請求之；（三）得請求調查有利之證據。以上權利是否均已明瞭？是否需要選任辯護人？" },
+      { t: "提審法第1條", q: "依提審法第1條告知你：人民被法院以外之任何機關逮捕、拘禁時，其本人或他人得向逮捕、拘禁地之地方法院聲請提審。是否清楚？" },
+      { t: "夜間詢問", q: "依刑事訴訟法第100條之3規定，原則上不得於夜間詢問；惟經你明示同意者，不在此限。請問你是否同意於夜間接受詢問？" }
+    ];
+
+    const RAW = (typeof DATA !== "undefined") ? DATA : {};
+    const DB = {};
+    for (const [k, v] of Object.entries(RAW)) {
+      const n = String((v && v.name) || "");
+      if (k.toLowerCase().includes("185") || k.toLowerCase().includes("dui") || n.includes("公共危險")) continue;
+      DB[k] = { name: n || k, laws: v.laws || [], chk: v.chk || [], qa: v.qa || [] };
+    }
+
+    let curKey = localStorage.getItem("k_case") || Object.keys(DB)[0] || "";
     let curTab = "all";
-    let kw = "";
+    let role = localStorage.getItem("k_role") || "suspect";
 
-    function toast(msg) {
+    function toast(m) {
       const el = document.getElementById("toast");
-      el.textContent = msg;
-      el.classList.add("show");
-      setTimeout(() => el.classList.remove("show"), 1800);
+      el.textContent = m; el.style.display = "block";
+      setTimeout(() => el.style.display = "none", 1500);
     }
-
-    function setCase(k) {
-      curKey = k;
-      localStorage.setItem("sel_case", k);
-      clearSearch(false);
-      render();
-    }
-
+    function cp(t, m) { navigator.clipboard.writeText(t).then(() => toast(m || "已複製")); }
+    function setCase(k) { curKey = k; localStorage.setItem("k_case", k); render(); }
     function setTab(t) {
       curTab = t;
       document.querySelectorAll(".bar button").forEach(b => b.classList.remove("active"));
-      document.getElementById("t-" + t).classList.add("active");
+      document.getElementById("b-" + t).classList.add("active");
       render();
     }
-
-    function onSearch() {
-      kw = document.getElementById("kwInput").value.trim();
-      document.getElementById("kwClear").style.display = kw ? "block" : "none";
-      render();
+    function setRole(r) { role = r; localStorage.setItem("k_role", r); render(); }
+    function getChk(k) { return JSON.parse(localStorage.getItem("c_" + k) || "{}"); }
+    function tog(k, i) { const s = getChk(k); s[i] = !s[i]; localStorage.setItem("c_" + k, JSON.stringify(s)); render(); }
+    function copyAllQA(k) {
+      const list = (role === "suspect") ? [...RIGHTS.map(r => ({ tag: r.t, q: r.q })), ...DB[k].qa] : DB[k].qa;
+      cp(`【${DB[k].name}筆錄】\n` + list.map((x, i) => `${i + 1}. [${x.tag}] 問：${x.q}\n答：\n`).join("\n"), "已複製整份筆錄");
     }
-
-    function clearSearch(doRender = true) {
-      kw = "";
-      document.getElementById("kwInput").value = "";
-      document.getElementById("kwClear").style.display = "none";
-      if (doRender) render();
-    }
-
-    function hl(txt) {
-      if (!kw) return txt;
-      const re = new RegExp(`(${kw.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi");
-      return txt.replace(re, '<span class="hl">$1</span>');
-    }
-
-    function getChk(k) {
-      return JSON.parse(localStorage.getItem("c_" + k) || "{}");
-    }
-
-    function togChk(k, i) {
+    function copyAllChk(k) {
       const s = getChk(k);
-      s[i] = !s[i];
-      localStorage.setItem("c_" + k, JSON.stringify(s));
-      render();
+      cp(`【${DB[k].name}卷宗檢核】\n` + DB[k].chk.map((v, i) => `${s[i] ? "☑" : "☐"} ${v}`).join("\n"), "已複製檢核表");
     }
-
-    function rstChk(k) {
-      if (confirm("清除【" + DB[k].name + "】勾選紀錄？")) {
-        localStorage.removeItem("c_" + k);
-        render();
-        toast("已重置勾選");
-      }
-    }
-
-    function copyChk(k) {
-      const d = DB[k], s = getChk(k);
-      const text = `【${d.name}檢核】\n` + d.chk.map((v, i) => `${s[i] ? "☑" : "☐"} ${v}`).join("\n");
-      navigator.clipboard.writeText(text).then(() => toast("✅ 已複製檢核摘要"));
-    }
-
-    function copyQA(k) {
-      const d = DB[k];
-      const text = `【${d.name}筆錄問句清單】\n` + (d.qa || []).map((x, i) => `${i + 1}. [${x.tag}] 問：${x.q}\n答：\n`).join("\n");
-      navigator.clipboard.writeText(text).then(() => toast("🎙️ 已複製整份筆錄問句"));
-    }
-
-    function copySingleQA(qText) {
-      navigator.clipboard.writeText(`問：${qText}\n答：`).then(() => toast("📋 已複製單題問句"));
-    }
-
-    function renderCard(k, isSearch = false) {
-      const d = DB[k];
-      const s = getChk(k);
-      const done = d.chk.filter((_, i) => s[i]).length;
-      const pct = d.chk.length ? Math.round((done / d.chk.length) * 100) : 0;
-      const hasQA = Array.isArray(d.qa) && d.qa.length > 0;
-      let h = "";
-
-      if (isSearch) {
-        h += `<div style="margin: 18px 0 8px; font-weight: 800; color: #38bdf8; font-size: .95rem;">${d.icon} ${d.name}</div>`;
-      }
-
-      if (curTab === "all" || curTab === "sop") {
-        const steps = isSearch ? d.sop.filter(x => x.toLowerCase().includes(kw.toLowerCase())) : d.sop;
-        if (steps.length) {
-          h += `<div class="card">
-            <div class="card-hd"><h2>📖 現場處置 SOP</h2><span class="badge">${steps.length} 步驟</span></div>
-            ${steps.map((x, i) => `<div class="step"><span class="num">${String(i + 1).padStart(2, "0")}</span><div>${hl(x)}</div></div>`).join("")}
-          </div>`;
-        }
-      }
-
-      if (curTab === "all" || curTab === "chk") {
-        const chks = d.chk.map((txt, idx) => ({ txt, idx })).filter(o => !isSearch || o.txt.toLowerCase().includes(kw.toLowerCase()));
-        if (chks.length) {
-          h += `<div class="card">
-            <div class="card-hd"><h2>✅ 卷宗表單檢核</h2><span class="badge">${done}/${d.chk.length} (${pct}%)</span></div>
-            <div class="prog-bg"><div class="prog-fill" style="width:${pct}%"></div></div>
-            ${chks.map(o => `<label class="chk ${s[o.idx] ? "done" : ""}">
-              <input type="checkbox" ${s[o.idx] ? "checked" : ""} onchange="togChk('${k}', ${o.idx})" />
-              <span>${hl(o.txt)}</span>
-            </label>`).join("")}
-            <div class="btns">
-              <button class="btn btn-copy" onclick="copyChk('${k}')">📋 複製檢核摘要</button>
-              <button class="btn btn-rst" onclick="rstChk('${k}')">重置</button>
-            </div>
-          </div>`;
-        }
-      }
-
-      if (curTab === "all" || curTab === "qa") {
-        if (hasQA) {
-          const qas = isSearch ? d.qa.filter(x => (x.tag + x.q).toLowerCase().includes(kw.toLowerCase())) : d.qa;
-          if (qas.length) {
-            h += `<div class="card">
-              <div class="card-hd"><h2>🎙️ 筆錄詢問要領（點擊單題可複製）</h2><span class="badge">${qas.length} 題</span></div>
-              ${qas.map(x => `<div class="qa-box" onclick="copySingleQA('${x.q.replace(/'/g, "\\'")}')">
-                <div class="qa-q"><span class="qa-tag">${hl(x.tag)}</span>${hl(x.q)}</div>
-              </div>`).join("")}
-              <div class="btns">
-                <button class="btn btn-purple" onclick="copyQA('${k}')">🎙️ 一鍵複製整份筆錄問句</button>
-              </div>
-            </div>`;
-          }
-        } else if (curTab === "qa" && !isSearch) {
-          h += `<div class="card" style="text-align:center; color:#94a3b8; padding:28px 16px;">
-            ${d.icon} <strong>${d.name}</strong> 為現場查處／行政取締案件，無須製作警詢筆錄。
-          </div>`;
-        }
-      }
-
-      return h;
-    }
-
     function render() {
-      const main = document.getElementById("mainBox");
-      if (!DB) {
-        let reason = "請確認 data.js 與 index.html 位於同一層目錄，且檔名為全小寫 data.js。";
-        if (window.__dataFileMissing) {
-          reason = "❌ 找不到 ./data.js 檔案（HTTP 404），請檢查 GitHub 儲存庫根目錄是否有上傳小寫 data.js。";
-        } else if (window.__dataSyntaxErr) {
-          reason = "❌ data.js 檔案有找到，但內部有語法錯誤：" + window.__dataSyntaxErr;
+      const keys = Object.keys(DB), main = document.getElementById("main");
+      if (!keys.length) { main.innerHTML = "<div class='card'>請確認 data.js 已建立</div>"; return; }
+      if (!DB[curKey]) curKey = keys[0];
+      const kw = document.getElementById("kw").value.trim().toLowerCase();
+      document.getElementById("nav").innerHTML = keys.map(k => `<button class="nav-btn ${!kw && k === curKey ? "active" : ""}" onclick="setCase('${k}')">${DB[k].name}</button>`).join("");
+      const showKeys = kw ? keys.filter(k => JSON.stringify(DB[k]).toLowerCase().includes(kw)) : [curKey];
+      main.innerHTML = showKeys.map(k => {
+        const d = DB[k], s = getChk(k); let h = kw ? `<h3 style="color:#38bdf8">${d.name}</h3>` : "";
+        if (curTab === "all" || curTab === "qa") {
+          h += `<div class="card"><div class="hd"><h2>🎙️ 筆錄工具（點擊單題複製）</h2></div>
+            <div style="display:flex;gap:6px;margin-bottom:10px">
+              <button class="nav-btn ${role === "suspect" ? "active" : ""}" style="flex:1" onclick="setRole('suspect')">嫌疑人</button>
+              <button class="nav-btn ${role === "victim" ? "active" : ""}" style="flex:1" onclick="setRole('victim')">告訴／被害人</button>
+              <button class="nav-btn ${role === "witness" ? "active" : ""}" style="flex:1" onclick="setRole('witness')">證人</button>
+            </div>
+            ${role === "suspect" ? `<div class="rights"><div style="color:#fda4af;font-weight:700;margin-bottom:6px">法定權利告知</div>` + RIGHTS.map(r => `<div class="box" style="border-left-color:#f43f5e" onclick="cp('問：${r.q}\\n答：')"><b>[${r.t}]</b> ${r.q}</div>`).join("") + `</div>` : ""}
+            ${d.qa.map((x, i) => `<div class="box" onclick="cp('問：${x.q}\\n答：')"><b>${i + 1}. [${x.tag}]</b> ${x.q}</div>`).join("")}
+            <button class="btn" onclick="copyAllQA('${k}')">一鍵複製整份筆錄</button></div>`;
         }
-        main.innerHTML = `<div class="card" style="text-align:center; color:#f43f5e; padding:24px 16px;">
-          <div style="font-weight:800; margin-bottom:8px;">⚠️ 尚未載入 data.js 資料檔</div>
-          <div style="font-size:.85rem; color:#cbd5e1;">${reason}</div>
-        </div>`;
-        return;
-      }
-
-      const keys = Object.keys(DB);
-      if (!keys.length) return;
-      if (!curKey || !DB[curKey]) curKey = keys.at(0);
-
-      document.getElementById("caseNav").innerHTML = keys.map(k => {
-        const d = DB[k];
-        const act = (!kw && k === curKey) ? "active" : "";
-        return `<button class="nav-btn ${act}" onclick="setCase('${k}')">${d.icon} ${d.name}</button>`;
-      }).join("");
-
-      if (kw) {
-        const q = kw.toLowerCase();
-        const matched = keys.filter(k => {
-          const d = DB[k];
-          const pool = [d.name, ...d.sop, ...d.chk, ...(d.qa || []).map(x => x.tag + x.q)].join(" ").toLowerCase();
-          return pool.includes(q);
-        });
-        main.innerHTML = matched.length
-          ? matched.map(k => renderCard(k, true)).join("")
-          : `<div class="card" style="text-align:center; color:#94a3b8; padding:32px 16px;">找不到符合「<span class="hl">${kw}</span>」的資料</div>`;
-        return;
-      }
-
-      main.innerHTML = renderCard(curKey, false);
+        if (curTab === "all" || curTab === "law") {
+          h += `<div class="card"><div class="hd"><h2>⚖️ 相關法條</h2></div>` + d.laws.map(l => `<div class="box law"><b style="color:#fbbf24">${l.title}</b><div style="white-space:pre-line;margin-top:4px">${l.content}</div></div>`).join("") + `</div>`;
+        }
+        if (curTab === "all" || curTab === "chk") {
+          h += `<div class="card"><div class="hd"><h2>✅ 卷宗檢核</h2></div>` + d.chk.map((c, i) => `<label class="chk ${s[i] ? "done" : ""}"><input type="checkbox" ${s[i] ? "checked" : ""} onchange="tog('${k}',${i})"><span>${c}</span></label>`).join("") + `<button class="btn btn-g" onclick="copyAllChk('${k}')">複製卷宗檢核</button></div>`;
+        }
+        return h;
+      }).join("") || "<div class='card'>查無資料</div>";
     }
-
     render();
   </script>
 </body>
