@@ -2,174 +2,328 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>筆錄・法條・卷宗檢核</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>勤務 SOP 分層檢核</title>
   <style>
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --card-2: #273549;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --warn: #fbbf24;
+      --ok: #34d399;
+      --border: #334155;
+    }
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", sans-serif;
-      background: #070b14; color: #f8fafc;
-      padding-bottom: 90px; line-height: 1.5;
+      background: var(--bg);
+      color: var(--text);
+      padding-bottom: 72px;
     }
-    header {
-      position: sticky; top: 0; z-index: 50;
-      background: #0b1120; border-bottom: 1px solid #1e293b;
-      padding: 12px 16px; display: flex; justify-content: space-between;
+    .top {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(15, 23, 42, 0.96);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
-    .brand { font-weight: 800; color: #38bdf8; }
-    .badge {
-      font-size: .75rem; padding: 2px 8px; border-radius: 999px;
-      background: rgba(56,189,248,.15); color: #38bdf8;
+    .back {
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      cursor: pointer;
     }
-    .wrap { max-width: 760px; margin: 12px auto; padding: 0 12px; }
-    .in {
-      width: 100%; background: #0f172a; border: 1px solid #334155;
-      color: #fff; padding: 10px 12px; border-radius: 10px; font-size: .9rem;
+    .top-title { font-size: 16px; font-weight: 700; }
+    .wrap { max-width: 680px; margin: 0 auto; padding: 14px; }
+    .hint { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+    .menu-btn {
+      width: 100%;
+      text-align: left;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 16px;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
     }
-    .grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-      gap: 8px; margin: 12px 0;
+    .menu-btn:active { background: var(--card-2); border-color: var(--accent); }
+    .arrow { color: var(--muted); font-size: 18px; }
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 12px;
     }
-    .nav-btn {
-      background: #0f172a; border: 1px solid #1e293b; color: #94a3b8;
-      padding: 9px 6px; border-radius: 10px; font-weight: 700; cursor: pointer;
+    .warn-box {
+      background: #2a2412;
+      border: 1px solid var(--warn);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 12px;
     }
-    .nav-btn.active { background: #0284c7; color: #fff; border-color: #38bdf8; }
-    .card {
-      background: #111827; border: 1px solid #1e293b;
-      border-radius: 14px; padding: 14px; margin-bottom: 14px;
+    .warn-box h3 { margin: 0 0 8px; font-size: 15px; color: var(--warn); }
+    .warn-box ul { margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.7; }
+    .row {
+      background: var(--card-2);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
     }
-    .hd {
-      display: flex; justify-content: space-between; align-items: center;
-      border-bottom: 1px solid #1e293b; padding-bottom: 8px; margin-bottom: 10px;
+    .row:last-child { margin-bottom: 0; }
+    .qa-tap { cursor: pointer; }
+    .qa-tap:active { opacity: 0.75; }
+    .tag {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent);
+      background: rgba(56, 189, 248, 0.15);
+      padding: 2px 8px;
+      border-radius: 6px;
+      margin-bottom: 6px;
     }
-    .hd h2 { margin: 0; font-size: .98rem; color: #38bdf8; }
-    .box {
-      background: #090d16; border: 1px solid #1e293b;
-      border-left: 3px solid #a855f7; border-radius: 8px;
-      padding: 10px; margin-bottom: 8px; cursor: pointer;
+    .q-text { font-size: 15px; line-height: 1.55; }
+    .chk-item { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; line-height: 1.5; }
+    .chk-item input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--ok); }
+    .law-t { font-size: 15px; font-weight: 700; color: var(--accent); margin-bottom: 6px; }
+    .law-c { font-size: 14px; line-height: 1.65; white-space: pre-line; }
+    .copy-all {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid var(--accent);
+      background: rgba(56, 189, 248, 0.14);
+      color: var(--accent);
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      cursor: pointer;
     }
-    .law { border-left-color: #f59e0b; cursor: default; }
-    .rights {
-      background: rgba(244,63,94,.08); border: 1px solid rgba(244,63,94,.35);
-      border-left: 4px solid #f43f5e; border-radius: 10px;
-      padding: 10px; margin-bottom: 10px;
-    }
-    .chk { display: flex; gap: 8px; padding: 8px; cursor: pointer; }
-    .chk.done span { text-decoration: line-through; color: #64748b; }
-    .btn {
-      width: 100%; padding: 10px; border: none; border-radius: 10px;
-      font-weight: 700; color: #fff; background: #7e22ce; cursor: pointer; margin-top: 8px;
-    }
-    .btn-g { background: #059669; }
-    .bar {
-      position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%);
-      width: calc(100% - 24px); max-width: 480px; background: #0f172a;
-      border: 1px solid #334155; border-radius: 999px; display: flex; padding: 4px;
-    }
-    .bar button {
-      flex: 1; background: none; border: none; color: #94a3b8;
-      padding: 8px 4px; border-radius: 999px; font-weight: 700; cursor: pointer;
-    }
-    .bar button.active { background: #0284c7; color: #fff; }
     .toast {
-      position: fixed; top: 60px; left: 50%; transform: translateX(-50%);
-      background: #10b981; color: #042f2e; padding: 6px 16px;
-      border-radius: 999px; font-weight: 800; display: none; z-index: 99;
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      background: #0f172a;
+      color: var(--ok);
+      border: 1px solid var(--ok);
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      z-index: 50;
     }
+    .toast.show { opacity: 1; }
   </style>
 </head>
 <body>
-  <header>
-    <div class="brand">筆錄・法條・卷宗檢核</div>
-    <span class="badge">OPS</span>
-  </header>
+  <div class="top">
+    <button id="backBtn" class="back" type="button" onclick="goBack()" style="display:none;">← 上一層</button>
+    <div id="topTitle" class="top-title">選擇案件類別</div>
+  </div>
+  <div id="app" class="wrap"></div>
   <div id="toast" class="toast">已複製</div>
-  <div class="wrap">
-    <input id="kw" class="in" placeholder="搜尋筆錄 / 法條 / 卷宗..." oninput="render()" />
-    <nav id="nav" class="grid"></nav>
-    <main id="main"></main>
-  </div>
-  <div class="bar">
-    <button id="b-all" class="active" onclick="setTab('all')">全部</button>
-    <button id="b-qa" onclick="setTab('qa')">筆錄</button>
-    <button id="b-law" onclick="setTab('law')">法條</button>
-    <button id="b-chk" onclick="setTab('chk')">卷宗檢核</button>
-  </div>
-  <script src="./data.js"></script>
+
+  <script src="data.js"></script>
   <script>
-    const RIGHTS = [
-      { t: "三項權利", q: "依刑事訴訟法第95條告知你：（一）得保持緘默，無須違背自己之意思而為陳述；（二）得選任辯護人，如為低收入戶、中低收入戶、原住民或其他依法令得請求法律扶助者，得請求之；（三）得請求調查有利之證據。以上權利是否均已明瞭？是否需要選任辯護人？" },
-      { t: "提審法第1條", q: "依提審法第1條告知你：人民被法院以外之任何機關逮捕、拘禁時，其本人或他人得向逮捕、拘禁地之地方法院聲請提審。是否清楚？" },
-      { t: "夜間詢問", q: "依刑事訴訟法第100條之3規定，原則上不得於夜間詢問；惟經你明示同意者，不在此限。請問你是否同意於夜間接受詢問？" }
-    ];
+    const DB = (typeof DATA !== "undefined") ? DATA : {};
+    const ICONS = {
+      theft: "💰",
+      injury: "🩹",
+      damage: "🔨",
+      embezzlement: "👜",
+      found: "🤲",
+      lost: "🔍",
+      angler: "🎣",
+      intimidation: "⚠️",
+      stolen_moto: "🛵",
+      lost_plate: "🪪"
+    };
+    const state = { caseKey: null, role: null, view: null };
 
-    const RAW = (typeof DATA !== "undefined") ? DATA : {};
-    const DB = {};
-    for (const [k, v] of Object.entries(RAW)) {
-      const n = String((v && v.name) || "");
-      if (k.toLowerCase().includes("185") || k.toLowerCase().includes("dui") || n.includes("公共危險")) continue;
-      DB[k] = { name: n || k, laws: v.laws || [], chk: v.chk || [], qa: v.qa || [] };
-    }
-
-    let curKey = localStorage.getItem("k_case") || Object.keys(DB)[0] || "";
-    let curTab = "all";
-    let role = localStorage.getItem("k_role") || "suspect";
-
-    function toast(m) {
+    function showToast(msg) {
       const el = document.getElementById("toast");
-      el.textContent = m; el.style.display = "block";
-      setTimeout(() => el.style.display = "none", 1500);
+      el.textContent = msg;
+      el.classList.add("show");
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => el.classList.remove("show"), 1600);
     }
-    function cp(t, m) { navigator.clipboard.writeText(t).then(() => toast(m || "已複製")); }
-    function setCase(k) { curKey = k; localStorage.setItem("k_case", k); render(); }
-    function setTab(t) {
-      curTab = t;
-      document.querySelectorAll(".bar button").forEach(b => b.classList.remove("active"));
-      document.getElementById("b-" + t).classList.add("active");
+
+    function copyText(txt, label) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(txt).then(() => showToast(label || "已複製")).catch(() => fallbackCopy(txt, label));
+      } else {
+        fallbackCopy(txt, label);
+      }
+    }
+
+    function fallbackCopy(txt, label) {
+      const ta = document.createElement("textarea");
+      ta.value = txt;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      showToast(label || "已複製");
+    }
+
+    function hasSuspect(item) {
+      return item && item.hasSuspect !== false;
+    }
+
+    function goBack() {
+      if (state.view) {
+        state.view = null;
+      } else if (state.role) {
+        state.role = null;
+      } else if (state.caseKey) {
+        state.caseKey = null;
+      }
       render();
     }
-    function setRole(r) { role = r; localStorage.setItem("k_role", r); render(); }
-    function getChk(k) { return JSON.parse(localStorage.getItem("c_" + k) || "{}"); }
-    function tog(k, i) { const s = getChk(k); s[i] = !s[i]; localStorage.setItem("c_" + k, JSON.stringify(s)); render(); }
-    function copyAllQA(k) {
-      const list = (role === "suspect") ? [...RIGHTS.map(r => ({ tag: r.t, q: r.q })), ...DB[k].qa] : DB[k].qa;
-      cp(`【${DB[k].name}筆錄】\n` + list.map((x, i) => `${i + 1}. [${x.tag}] 問：${x.q}\n答：\n`).join("\n"), "已複製整份筆錄");
+    function chooseCase(key) {
+      state.caseKey = key;
+      state.role = null;
+      state.view = null;
+      render();
     }
-    function copyAllChk(k) {
-      const s = getChk(k);
-      cp(`【${DB[k].name}卷宗檢核】\n` + DB[k].chk.map((v, i) => `${s[i] ? "☑" : "☐"} ${v}`).join("\n"), "已複製檢核表");
+
+    function chooseRole(r) {
+      state.role = r;
+      state.view = null;
+      render();
     }
+
+    function chooseView(v) {
+      state.view = v;
+      render();
+    }
+
+    function renderCaseMenu(app, titleEl, backEl) {
+      backEl.style.display = "none";
+      titleEl.textContent = "勤務 SOP 分層檢核";
+      const keys = Object.keys(DB);
+      if (!keys.length) {
+        app.innerHTML = '<div class="panel">尚未載入 data.js 或資料為空。</div>';
+        return;
+      }
+      app.innerHTML = '<div class="hint">點選案件類別進入下一層</div>' + keys.map(k => {
+        const icon = ICONS[k] || "📋";
+        const name = DB[k].name || k;
+        return `<button class="menu-btn" type="button" onclick="chooseCase('${k}')"><span>${icon} ${name}</span><span class="arrow">›</span></button>`;
+      }).join("");
+    }
+
+    function renderSubMenu(app, titleEl, backEl) {
+      const item = DB[state.caseKey];
+      const icon = ICONS[state.caseKey] || "📋";
+      backEl.style.display = "inline-block";
+      titleEl.textContent = `${icon} ${item.name}`;
+
+      if (hasSuspect(item) && !state.role) {
+        app.innerHTML =
+          '<div class="hint">請先選擇對象身分</div>' +
+          '<button class="menu-btn" type="button" onclick="chooseRole(\'victim\')"><span>🙋 被害人／報案人／關係人</span><span class="arrow">›</span></button>' +
+          '<button class="menu-btn" type="button" onclick="chooseRole(\'suspect\')"><span>⚖️ 犯罪嫌疑人</span><span class="arrow">›</span></button>';
+        return;
+      }
+
+      const roleLabel = state.role === "suspect" ? "犯罪嫌疑人" : (hasSuspect(item) ? "被害人／報案人／關係人" : "案件處理");
+      let html = `<div class="hint">${roleLabel} — 選擇要查看的項目</div>`;
+      if (Array.isArray(item.qa) && item.qa.length) {
+        html += '<button class="menu-btn" type="button" onclick="chooseView(\'qa\')"><span>📝 筆錄問句（點題複製）</span><span class="arrow">›</span></button>';
+      }
+      html += '<button class="menu-btn" type="button" onclick="chooseView(\'laws\')"><span>⚖️ 法條依據</span><span class="arrow">›</span></button>';
+      html += '<button class="menu-btn" type="button" onclick="chooseView(\'chk\')"><span>✅ 卷宗檢核</span><span class="arrow">›</span></button>';
+      app.innerHTML = html;
+    }
+        function renderDetail(app, titleEl, backEl) {
+      const item = DB[state.caseKey];
+      const icon = ICONS[state.caseKey] || "📋";
+      const isSuspect = hasSuspect(item) && state.role === "suspect";
+      backEl.style.display = "inline-block";
+
+      if (state.view === "qa") {
+        titleEl.textContent = `${icon} ${item.name} · 筆錄問句`;
+        const list = item.qa || [];
+        const allText = list.map((x, i) => `${i + 1}. [${x.tag}] ${x.q}`).join("\n");
+        let html = "";
+        if (isSuspect) {
+          html += '<div class="warn-box"><h3>嫌疑人法定告知與程序提醒</h3><ul>' +
+            '<li><strong>三項權利</strong>：得保持緘默無須違背自己之意思而為陳述；得選任辯護人；得請求調查有利之證據。</li>' +
+            '<li><strong>提審法第 1 條</strong>：被逮捕、拘禁時，本人或他人得向法院聲請提審。</li>' +
+            '<li><strong>夜間詢問</strong>：注意刑事訴訟法第 100-3 條規定與例外事由。</li>' +
+            '</ul></div>';
+        }
+        html += `<button class="copy-all" type="button" onclick="copyAllQa()">📋 一鍵複製全部問句</button>`;
+        html += '<div class="panel">' + list.map((x, i) => {
+          const safeQ = encodeURIComponent(`${i + 1}. [${x.tag}] ${x.q}`);
+          return `<div class="row qa-tap" onclick="copyEncoded('${safeQ}', '已複製第 ${i + 1} 題')"><div class="tag">${i + 1}. ${x.tag}</div><div class="q-text">${x.q}</div></div>`;
+        }).join("") + "</div>";
+        app.innerHTML = html;
+        window._allQaCache = allText;
+        return;
+      }
+
+      if (state.view === "laws") {
+        titleEl.textContent = `${icon} ${item.name} · 法條依據`;
+        const laws = item.laws || [];
+        app.innerHTML = '<div class="panel">' + laws.map(l =>
+          `<div class="row"><div class="law-t">${l.title}</div><div class="law-c">${l.content}</div></div>`
+        ).join("") + "</div>";
+        return;
+      }
+
+      if (state.view === "chk") {
+        titleEl.textContent = `${icon} ${item.name} · 卷宗檢核`;
+        const chks = item.chk || [];
+        app.innerHTML = '<div class="panel">' + chks.map((c, idx) =>
+          `<div class="row"><label class="chk-item"><input type="checkbox" id="chk_${state.caseKey}_${idx}" /><span>${c}</span></label></div>`
+        ).join("") + "</div>";
+      }
+    }
+
+    function copyEncoded(enc, label) {
+      copyText(decodeURIComponent(enc), label);
+    }
+
+    function copyAllQa() {
+      copyText(window._allQaCache || "", "已複製全部問句");
+    }
+
     function render() {
-      const keys = Object.keys(DB), main = document.getElementById("main");
-      if (!keys.length) { main.innerHTML = "<div class='card'>請確認 data.js 已建立</div>"; return; }
-      if (!DB[curKey]) curKey = keys[0];
-      const kw = document.getElementById("kw").value.trim().toLowerCase();
-      document.getElementById("nav").innerHTML = keys.map(k => `<button class="nav-btn ${!kw && k === curKey ? "active" : ""}" onclick="setCase('${k}')">${DB[k].name}</button>`).join("");
-      const showKeys = kw ? keys.filter(k => JSON.stringify(DB[k]).toLowerCase().includes(kw)) : [curKey];
-      main.innerHTML = showKeys.map(k => {
-        const d = DB[k], s = getChk(k); let h = kw ? `<h3 style="color:#38bdf8">${d.name}</h3>` : "";
-        if (curTab === "all" || curTab === "qa") {
-          h += `<div class="card"><div class="hd"><h2>🎙️ 筆錄工具（點擊單題複製）</h2></div>
-            <div style="display:flex;gap:6px;margin-bottom:10px">
-              <button class="nav-btn ${role === "suspect" ? "active" : ""}" style="flex:1" onclick="setRole('suspect')">嫌疑人</button>
-              <button class="nav-btn ${role === "victim" ? "active" : ""}" style="flex:1" onclick="setRole('victim')">告訴／被害人</button>
-              <button class="nav-btn ${role === "witness" ? "active" : ""}" style="flex:1" onclick="setRole('witness')">證人</button>
-            </div>
-            ${role === "suspect" ? `<div class="rights"><div style="color:#fda4af;font-weight:700;margin-bottom:6px">法定權利告知</div>` + RIGHTS.map(r => `<div class="box" style="border-left-color:#f43f5e" onclick="cp('問：${r.q}\\n答：')"><b>[${r.t}]</b> ${r.q}</div>`).join("") + `</div>` : ""}
-            ${d.qa.map((x, i) => `<div class="box" onclick="cp('問：${x.q}\\n答：')"><b>${i + 1}. [${x.tag}]</b> ${x.q}</div>`).join("")}
-            <button class="btn" onclick="copyAllQA('${k}')">一鍵複製整份筆錄</button></div>`;
-        }
-        if (curTab === "all" || curTab === "law") {
-          h += `<div class="card"><div class="hd"><h2>⚖️ 相關法條</h2></div>` + d.laws.map(l => `<div class="box law"><b style="color:#fbbf24">${l.title}</b><div style="white-space:pre-line;margin-top:4px">${l.content}</div></div>`).join("") + `</div>`;
-        }
-        if (curTab === "all" || curTab === "chk") {
-          h += `<div class="card"><div class="hd"><h2>✅ 卷宗檢核</h2></div>` + d.chk.map((c, i) => `<label class="chk ${s[i] ? "done" : ""}"><input type="checkbox" ${s[i] ? "checked" : ""} onchange="tog('${k}',${i})"><span>${c}</span></label>`).join("") + `<button class="btn btn-g" onclick="copyAllChk('${k}')">複製卷宗檢核</button></div>`;
-        }
-        return h;
-      }).join("") || "<div class='card'>查無資料</div>";
+      const app = document.getElementById("app");
+      const titleEl = document.getElementById("topTitle");
+      const backEl = document.getElementById("backBtn");
+      if (!state.caseKey) {
+        renderCaseMenu(app, titleEl, backEl);
+      } else if (!state.view) {
+        renderSubMenu(app, titleEl, backEl);
+      } else {
+        renderDetail(app, titleEl, backEl);
+      }
     }
+
     render();
   </script>
 </body>
