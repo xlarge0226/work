@@ -182,6 +182,28 @@ const DATA = {
       "【遺失】拾得物系統比對、聯繫認領或結案登錄紀錄"
     ]
   },
+  angler: {
+    name: "釣客取締",
+    hasSuspect: false,
+    directCheck: true,
+    qa: [],
+    laws: [
+      {
+        title: "商港法第 36 條第 1 項第 3 款",
+        content: "商港區域內，不得為下列行為：三、在公告禁止垂釣區域內垂釣。"
+      },
+      {
+        title: "商港法第 71 條",
+        content: "違反第三十六條第一項各款規定之一者，由航港局或指定機關處新臺幣六百元以上三千元以下罰鍰，並得按次處罰。"
+      }
+    ],
+    chk: [
+      "陳報單",
+      "照片及影像上傳",
+      "戶役政資料",
+      "取締釣客單"
+    ]
+  },
   intimidation: {
     name: "恐嚇",
     hasSuspect: true,
