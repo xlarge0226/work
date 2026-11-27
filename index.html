@@ -146,7 +146,7 @@
 
   <script src="data.js"></script>
   <script>
-    const DB = (typeof DATA !== "undefined") ? DATA : {};
+    const DB = (typeof DATA !== "undefined") ? DATA : (window.DATA || {});
     const ICONS = {
       theft: "💰",
       injury: "🩹",
@@ -257,7 +257,7 @@
       html += '<button class="menu-btn" type="button" onclick="chooseView(\'chk\')"><span>✅ 卷宗檢核</span><span class="arrow">›</span></button>';
       app.innerHTML = html;
     }
-        function renderDetail(app, titleEl, backEl) {
+    function renderDetail(app, titleEl, backEl) {
       const item = DB[state.caseKey];
       const icon = ICONS[state.caseKey] || "📋";
       const isSuspect = hasSuspect(item) && state.role === "suspect";
