@@ -143,6 +143,7 @@
   </div>
   <div id="app" class="wrap"></div>
   <div id="toast" class="toast">已複製</div>
+
   <script src="data.js"></script>
   <script>
     const ICONS = {
@@ -159,16 +160,16 @@
     };
 
     const FALLBACK_DB = {
-      theft: { name: "竊盜", hasSuspect: true, qa: [{ tag: "案情", q: "遭竊時間、地點、物品特徵與財損金額為何？" }], laws: [{ title: "刑法第 320 條", content: "意圖為自己或第三人不法之所有，而竊取他人之動產者，為竊盜罪。" }], chk: ["被害人／報案人筆錄", "現場或監視器影像資料", "贓物／財損清單"] },
-      injury: { name: "傷害", hasSuspect: true, qa: [{ tag: "案情", q: "發生經過、受傷部位與是否提出告訴？" }], laws: [{ title: "刑法第 277 條", content: "傷害人之身體或健康者，處五年以下有期徒刑、拘役或五十萬元以下罰金。" }], chk: ["驗傷診斷證明書", "告訴乃論告知紀錄", "現場照片或監視器畫面"] },
-      damage: { name: "毀損", hasSuspect: true, qa: [{ tag: "案情", q: "受損標的、毀損方式與修復費用估計？" }], laws: [{ title: "刑法第 354 條", content: "毀棄、損壞前二條以外之他人之物或致令不堪用，足以生損害於公眾或他人者。" }], chk: ["毀損標的現況照片", "修復估價單或權屬證明", "筆錄與監視器佐證"] },
-      embezzlement: { name: "侵占", hasSuspect: true, qa: [{ tag: "案情", q: "標的物如何合法持有、何時發現未返還或遭處分？" }], laws: [{ title: "刑法第 335 條", content: "意圖為自己或第三人不法之所有，而侵占自己持有他人之物者，為侵占罪。" }], chk: ["持有關係證明文件", "催告或交接紀錄", "當事人筆錄"] },
-      found: { name: "拾得遺失物", hasSuspect: false, qa: [{ tag: "拾得", q: "何時、何地拾得物品？外觀特徵與目前保管方式為何？" }], laws: [{ title: "民法第 803 條", content: "拾得遺失物者，應通知其所有人、失主、其他有受領權之人或報告警察、自治機關。" }], chk: ["拾得遺失物受理登記／收據", "物品拍照與特徵紀錄", "招領或發還紀錄"] },
-      lost: { name: "遺失物", hasSuspect: false, qa: [{ tag: "遺失", q: "遺失時間、可能路線或場所與物品特徵為何？" }], laws: [{ title: "民法第 807 條", content: "遺失物自通知或招領之日起逾六個月，未經有受領權之人認領者，由拾得人取得其所有權。" }], chk: ["遺失物受理資料", "物品特徵與序號／廠牌", "後續認領或結案登錄"] },
-      angler: { name: "釣客取締", hasSuspect: true, qa: [{ tag: "現場", q: "進入管制／禁止垂釣區域之時間、地點與違規行為？" }], laws: [{ title: "相關漁港／水域／公告管制規定", content: "依主管機關公告之垂釣管制區域與安全規定辦理舉發或勸導。" }], chk: ["違規現場照片或錄影", "現場公告或警戒標示照片", "舉發／移送或勸導紀錄"] },
-      intimidation: { name: "恐嚇", hasSuspect: true, qa: [{ tag: "案情", q: "對方如何以加害生命、身體、自由、名譽、財產之事恐嚇？" }], laws: [{ title: "刑法第 305 條", content: "以加害生命、身體、自由、名譽、財產之事恐嚇他人，致生危害於安全者。" }], chk: ["恐嚇言詞、訊息或通聯截圖", "證人或監視器資料", "被害人心生畏懼之陳述"] },
-      stolen_moto: { name: "機車失竊", hasSuspect: true, qa: [{ tag: "車輛", q: "車號、廠牌顏色、最後停放時間地點與鑰匙保管狀況？" }], laws: [{ title: "刑法第 320 條", content: "竊取機器腳踏車者，依竊盜罪章相關規定偵辦。" }], chk: ["行照或車籍資料", "失竊車輛系統登錄", "停車處周邊監視器調閱"] },
-      lost_plate: { name: "號牌遺失", hasSuspect: false, qa: [{ tag: "號牌", q: "遺失號牌號碼、最後確認在車上之時間地點？" }], laws: [{ title: "道路交通安全規則", content: "號牌遺失應依規定辦理補發或換發，並注意使用狀況。" }], chk: ["車籍與號牌號碼核對", "遺失／註銷或補發相關證明", "當事人確認紀錄"] }
+      theft: { name: "竊盜", hasSuspect: true, qa: [{ tag: "案情", q: "遭竊時間、地點、物品特徵與財損金額為何？" }], laws: [{ title: "刑法第 320 條", content: "意圖為自己或第三人不法之所有，而竊取他人之動產者，為竊盜罪。" }], chk: ["陳報單", "受理案件記錄表", "受理案件登記聯單"] },
+      injury: { name: "傷害", hasSuspect: true, qa: [{ tag: "案情", q: "發生經過、受傷部位與是否提出告訴？" }], laws: [{ title: "刑法第 277 條", content: "傷害人之身體或健康者，處五年以下有期徒刑、拘役或五十萬元以下罰金。" }], chk: ["陳報單", "受理案件記錄表", "驗傷診斷證明書"] },
+      damage: { name: "毀損", hasSuspect: true, qa: [{ tag: "案情", q: "受損標的、毀損方式與修復費用估計？" }], laws: [{ title: "刑法第 354 條", content: "毀棄、損壞前二條以外之他人之物或致令不堪用，足以生損害於公眾或他人者。" }], chk: ["陳報單", "受理案件記錄表", "照片黏貼表"] },
+      embezzlement: { name: "侵占", hasSuspect: true, qa: [{ tag: "案情", q: "標的物如何合法持有、何時發現未返還或遭處分？" }], laws: [{ title: "刑法第 335 條", content: "意圖為自己或第三人不法之所有，而侵占自己持有他人之物者，為侵占罪。" }], chk: ["陳報單", "受理案件記錄表", "持有關係證明文件"] },
+      found: { name: "拾得遺失物", hasSuspect: false, qa: [{ tag: "拾得", q: "何時、何地拾得物品？外觀特徵與目前保管方式為何？" }], laws: [{ title: "民法第 803 條", content: "拾得遺失物者，應通知其所有人、失主、其他有受領權之人或報告警察、自治機關。" }], chk: ["陳報單", "受理案件記錄表", "拾得遺失物收據"] },
+      lost: { name: "遺失物", hasSuspect: false, qa: [{ tag: "遺失", q: "遺失時間、可能路線或場所與物品特徵為何？" }], laws: [{ title: "民法第 807 條", content: "遺失物自通知或招領之日起逾六個月，未經有受領權之人認領者，由拾得人取得其所有權。" }], chk: ["陳報單", "受理案件記錄表", "受理案件登記聯單"] },
+      angler: { name: "釣客取締", hasSuspect: false, directCheck: true, qa: [], laws: [{ title: "漁港法／商港法／水域管理公告", content: "依主管機關公告之禁止或限制垂釣區域規定辦理勸導、舉發或函送裁罰。" }], chk: ["陳報單", "照片及影像上傳", "戶役政資料", "取締釣客單"] },
+      intimidation: { name: "恐嚇", hasSuspect: true, qa: [{ tag: "案情", q: "對方如何以加害生命、身體、自由、名譽、財產之事恐嚇？" }], laws: [{ title: "刑法第 305 條", content: "以加害生命、身體、自由、名譽、財產之事恐嚇他人，致生危害於安全者。" }], chk: ["陳報單", "受理案件記錄表", "恐嚇訊息截圖"] },
+      stolen_moto: { name: "機車失竊", hasSuspect: true, qa: [{ tag: "車輛", q: "車號、廠牌顏色、最後停放時間地點與鑰匙保管狀況？" }], laws: [{ title: "刑法第 320 條", content: "竊取機器腳踏車者，依竊盜罪章相關規定偵辦。" }], chk: ["陳報單", "受理案件記錄表", "失竊車輛登錄"] },
+      lost_plate: { name: "號牌遺失", hasSuspect: false, qa: [{ tag: "號牌", q: "遺失號牌號碼、最後確認在車上之時間地點？" }], laws: [{ title: "道路交通安全規則", content: "號牌遺失應依規定辦理補發或換發，並注意使用狀況。" }], chk: ["陳報單", "受理案件記錄表", "車籍資料"] }
     };
 
     const externalData = (typeof DATA !== "undefined" && DATA && typeof DATA === "object")
@@ -254,7 +255,7 @@
       backEl.style.display = "inline-block";
       titleEl.textContent = `${icon} ${item.name}`;
 
-      if (hasSuspect(item) && !state.role) {
+      if (!item.directCheck && hasSuspect(item) && !state.role) {
         app.innerHTML =
           '<div class="hint">請先選擇對象身分</div>' +
           '<button class="menu-btn" type="button" onclick="chooseRole(\'victim\')"><span>🙋 被害人／報案人／關係人</span><span class="arrow">›</span></button>' +
@@ -262,13 +263,15 @@
         return;
       }
 
-      const roleLabel = state.role === "suspect" ? "犯罪嫌疑人" : (hasSuspect(item) ? "被害人／報案人／關係人" : "案件處理");
+      const roleLabel = item.directCheck
+        ? "取締作業"
+        : (state.role === "suspect" ? "犯罪嫌疑人" : (hasSuspect(item) ? "被害人／報案人／關係人" : "案件處理"));
       let html = `<div class="hint">${roleLabel} — 選擇要查看的項目</div>`;
-      if (Array.isArray(item.qa) && item.qa.length) {
+      if (!item.directCheck && Array.isArray(item.qa) && item.qa.length) {
         html += '<button class="menu-btn" type="button" onclick="chooseView(\'qa\')"><span>📝 筆錄問句（點題複製）</span><span class="arrow">›</span></button>';
       }
-      html += '<button class="menu-btn" type="button" onclick="chooseView(\'laws\')"><span>⚖️ 法條依據</span><span class="arrow">›</span></button>';
       html += '<button class="menu-btn" type="button" onclick="chooseView(\'chk\')"><span>✅ 卷宗檢核</span><span class="arrow">›</span></button>';
+      html += '<button class="menu-btn" type="button" onclick="chooseView(\'laws\')"><span>⚖️ 法條依據</span><span class="arrow">›</span></button>';
       app.innerHTML = html;
     }
 
